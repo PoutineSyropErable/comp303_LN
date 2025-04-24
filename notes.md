@@ -331,8 +331,6 @@ optional nesting: Optional<Optional<R>>
 | `@Disabled`    | Skips the test                              |
 | `@DisplayName` | Custom name for the test                    |
 
----
-
 ### ⚖️ Assertions (`org.junit.jupiter.api.Assertions`)
 
 | Assertion                                  | Purpose                         |
@@ -525,10 +523,10 @@ void testWithdrawReducesBalance() {
 
 ### ✅ Good tests are:
 
-- Fast
+- Fast / Speed
 - Independent
-- Deterministic
-- Repeatable
+- Deterministic / Repeatable
+- Focus
 - Readable
 
 # Liskov Substitution Principle (LSP)
@@ -705,3 +703,162 @@ wizardPlayer.getActiveItemMO()
 
 
 ```
+
+# Observer:
+
+```java
+============Model==========
+Field:
+    Data and state
+    List<Observers>
+
+Methods:
+    add/remove observer
+    get/Set Data.
+    #optional: notifyObservers (not called in set if batch processing )
+
+==========Observer=========
+Field:
+    Representation of accurate model data
+    Or model reference
+
+method:
+    newNumber / numberChanged.
+    newNumber(int 5): (push strategy)
+    newNumber(pModel) pModel.getIntegerData() (pull strategy)
+    ^^ Create a new interface which the Model implement.
+    The interface only has getter method. So unmodifiable.
+
+
+// Flexibility, doesn't need to just be number changed. Doesn't always need to be notified.
+public interface Observer {
+    default void increased(int pNumber) { }
+    default void decreased(int pNumber) { }
+    default void changedToMax(int pNumber) { }
+    default void changedToMin(int pNumber) { }
+}
+// Only implement what you need, and can split into multiple interface if needed
+
+
+
+```
+
+# Java FX, GUI, Event Handling:
+
+![Gui components](./pictures/gui_components.png)
+
+<!-- end -->
+
+![Gui components (Object diagram)](./pictures/gui_component_od.png)
+
+<!-- end -->
+
+```java
+public class LuckyNumber extends Application {
+    @Override
+    public void start(Stage pStage) {
+        Model model = new Model(); // observer
+        GridPane root = new GridPane();
+        // Panel classes defined earlier.
+        root.add(new SliderPanel(model), 0, 0, 1, 1);
+        root.add(new IntegerPanel(model), 0, 1, 1, 1);
+        root.add(new TextPanel(model), 0, 2, 1, 1);
+        pStage.setScene(new Scene(root));
+        pStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+}
+
+
+public class IntegerPanel extends Parent implements Observer {
+    private TextField aText = new TextField();
+    private Model aModel;
+    public IntegerPanel(Model pModel) {
+        aModel = pModel;
+        // register as an observer of the model
+        aModel.addObserver(this);
+        aText.setText(new Integer(aModel.getNumber()).toString());
+        // add the text field to the component graph
+        getChildren().add(aText);
+        ...
+    }
+    // will be called when notified by the model that number has changed
+    public void numberChanged(int pNumber) {
+        aText.setText(new Integer(pNumber).toString());
+    }
+}
+
+
+// with event loop:
+// our defined observer.
+
+public class IntegerPanel extends Parent implements Observer {
+    private TextField aText = new TextField();
+    private Model aModel;
+
+    public IntegerPanel(Model pModel) {
+
+        aModel = pModel;
+        aModel.addObserver(this);
+        aText.setText(new Integer(aModel.getNumber()).toString());
+        getChildren().add(aText);
+
+        aText.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent pEvent) {
+                int number;
+                try {
+                    number = Integer.parseInt(aText.getText());
+                }
+                catch(NumberFormatException pException ) {
+                    number = 1;
+                }
+                aModel.setNumber(number);
+                }
+            }
+        );
+    }
+}
+
+
+// Observer code:
+
+public class Model {
+    private int aNumber = 5;
+    private List<Observer> aObservers = new ArrayList<>();
+    public void addObserver(Observer pObserver) {
+        aObservers.add(pObserver);
+    }
+    public void removeObserver(Observer pObserver) {
+        aObservers.remove(pObserver);
+    }
+
+
+    private void notifyObservers() {
+        for (Observer observer : aObservers) {
+            observer.numberChanged(aNumber);
+        }
+    }
+
+    public void setNumber(int pNumber) {
+        aNumber = pNumber;
+        notifyObservers();
+  }
+}
+
+public interface Observer {
+    void numberChanged(int pNumber);
+}
+
+
+```
+
+# End
+
+Write nothing here
+
+---
