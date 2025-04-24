@@ -1,0 +1,572 @@
+COMP 303
+Lecture 9
+
+Composition II
+Winter 2025
+slides by Jonathan Campbell
+© Instructor-generated course materials (e.g., slides, notes, assignment or exam questions, etc.) are protected by law and may not
+be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of
+copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.
+
+Announcements
+• codesample.info
+• Brainstorming meetings
+• For groups of 3: survey coming soon.
+• Project complexity.
+•
+
+https://www.mcgill.ca/study/2024-2025/university_regulations_and_resources/
+undergraduate/gi_credit_system
+
+• One-on-one meetings with TAs
+2
+
+Composition
+
+• Composite pattern & sequence diagrams
+• Decorator pattern & polymorphic copying (today)
+• Prototype & Command patterns & the Law of Demeter
+
+3
+
+Recap
+
+Composition
+• Composition: one object holding a reference to another.
+• "Has-a" relationship: A deck "has a" number of cards.
+
+• A very important concept: large software systems are
+
+always assembled from smaller parts, and composition is
+one of the main ways to do this (also, inheritance).
+
+• We like to design larger abstractions in terms of smaller ones.
+
+5
+
+Composition
+• The solution to two common design situations:
+• Aggregation: when an abstraction must contain a collection of other
+abstractions. E.g., a Deck that contains ("aggregates") a collection
+of Cards ("components").
+
+• Delegation: when a class is too big (God class anti-pattern), we may
+want to break it down so that it contains aggregates of smaller
+classes, and then delegate responsibility to each part.
+
+• These purposes are not mutually-exclusive; they can
+sometimes can be used together.
+6
+
+Example: Solitaire
+
+Windows 3.0 solitaire (https://bgr.com/wp-content/uploads/2015/08/windows-solitaire-30.png)
+
+7
+
+Example: Solitaire
+The Tableau and Foundations
+aggregate various CardStacks.
+
+The GameModel class
+aggregates objects of the four
+di erent classes, and
+delegates to them as needed.
+
+aggregation
+symbol
+
+We could have put all the logic
+directly in GameModel, but
+then the class would become
+very large.
+
+CardStack stores a
+List<Card> and
+associated methods
+(push, pop, peek, etc.)
+
+ff
+
+8
+
+Composition
+• There are speci c design patterns we can use to
+
+compose objects to avoid unnecessary complications.
+
+• COMPOSITE pattern
+• DECORATOR pattern
+• PROTOTYPE pattern
+• COMMAND pattern
+
+fi
+
+9
+
+COMPOSITE pattern
+
+• Situation: We'd like to have a group of objects behave like
+a single object.
+
+• For example: a class that aggregates a bunch of CardSources
+should itself be treated as a CardSource.
+
+10
+
+COMPOSITE pattern
+Client code should only depend
+on the component interface.
+
+The composite aggregates a
+number of objects of the
+component type.
+The composite also implements the component interface,
+so that it can be treated the same as any leaf.
+11
+
+Composite pattern examples
+
+• All these composite classes implemented the component
+interface, while aggregating object(s) of said interface.
+
+• CompositeCardSource (CardSource)
+• Building (MapObject)
+• Mashup (Song)
+
+12
+
+Sequence diagrams
+
+Sequence diagrams
+• The use of composition involves objects collaborating
+with each other, i.e., objects calling methods on other
+objects at run-time.
+
+• Contrasts with static design decisions, which involve which classes
+depend on which other classes.
+
+• It can be helpful to model design decisions related to
+
+object call sequences. We can do so using a sequence
+diagram.
+
+14
+
+Sequence diagrams
+
+• Assume that client code creates a CompositeCardSource
+object, which aggregates two CardSources: a Deck, and
+another CompositeCardSource, which itself contains two
+Decks.
+
+• Let's model the client calling isEmpty() on its card source.
+
+15
+
+isEmpty sequence diagram
+Objects listed at the top, with most informative type names.
+
+isEmpty: a recursive call sequence
+Can't be captured16in a class diagram.
+
+isEmpty sequence diagram
+
+directed arrow:
+method call
+from caller to
+callee
+activation box:
+time spent
+executing
+method
+
+dashed, dotted
+arrow: return
+
+dashed vertical line: the object's life line
+17
+
+(in this case, all were created at start)
+
+Iterator class diagram
+
+Deck has a CardStack.
+Deck and CardStack implement Iterable.
+18
+
+Iterator sequence diagram
+
+• Suppose we want to model client code like this:
+for (Card card : Deck) {
+this.showCard(card)
+}
+
+19
+
+Iterator sequence diagram
+
+20
+
+Iterator sequence diagram
+
+iterator() is delegated
+from Deck to the
+CardStack.
+
+21
+
+Iterator sequence diagram
+
+iterator() is delegated
+from Deck to the
+CardStack.
+CardStack creates a
+new Iterator (calling the
+constructor).
+
+22
+
+Iterator sequence diagram
+
+iterator() is delegated
+from Deck to the
+CardStack.
+CardStack creates a
+new Iterator (calling the
+constructor).
+
+23
+
+The iterator object
+appears here instead of
+at the top, because it's
+only created here.
+
+Iterator sequence diagram
+indicates the returned
+value
+
+24
+
+Iterator sequence diagram
+
+fi
+
+25
+
+Models only a speci c
+execution; in another
+diagram, hasNext() may
+have returned False.
+
+DECORATOR pattern
+
+Adding functionality to a class
+• Consider that we have a class and want to optionally add
+some functionality to it. To do so, we have a few options:
+
+• We could use inheritance to write a child class that inherits from the
+base class, and implement our new functionality.
+(E.g., LoggingDeck inherits from Deck.)
+
+• If we have an interface, we can write another implementing class.
+(E.g., both Deck and LoggingDeck can implement CardSource.)
+
+27
+
+Adding functionality to a class
+• Problem: What if we have several di erent kinds of
+
+functionality, and we want to add some combination of
+them to instances of certain class(es)?
+
+• We'd have to implement each di erent combination as its own class
+(either child class or implementing class). That's a lot of work!
+
+• We want to nd a nicer, more dynamic way to do this.
+• We want to even support adding and removing functionality at
+
+runtime (e.g., a user could turn options on or o during gameplay).
+
+ff
+
+ff
+
+ff
+
+fi
+
+28
+
+Solution #1: Multi-mode class
+
+• One way to do this is to combine all functionalities in a
+
+single class (e.g., MultiModeDeck), and just use ags to
+decide which functionalities to use at any given point.
+
+fl
+
+29
+
+Multi-mode class
+public class MultiModeDeck implements CardSource {
+enum Mode {
+SIMPLE, LOGGING, MEMORIZING, LOGGING_MEMORIZING
+}
+private Mode aMode = Mode.SIMPLE;
+public void setMode(Mode pMode) { ... }
+public Card draw() {
+if (aMode == Mode.SIMPLE) { ... }
+else if (aMode == Mode.LOGGING) { ... }
+...
+}
+}
+
+30
+
+Multi-mode class
+• This solution lets us toggle features on and o at runtime
+making the design exible. But:
+
+• the state space for objects becomes very complex
+(our state diagrams would be very large!)
+
+• it violates the principle of separation of concerns.
+• in extreme cases, it could turn a simple class into a God Class (antipattern) or could lead to a big Switch Statement (anti-pattern).
+
+ff
+
+fl
+
+31
+
+Solution #2: DECORATOR pattern
+
+• Context: We want to "decorate" some objects with
+
+additional functionality, while still treating those objects
+like any other object of the undecorated type.
+
+32
+
+DECORATOR pattern
+The decorator implements
+the component interface.
+
+The decorator aggregates one object of the component
+interface type, allowing it to decorate any leaves
+or even other decorators (or composites).
+33
+
+DECORATOR vs COMPOSITE
+• Both the Decorator and Composite patterns feature a
+
+class that implements the component interface, and
+aggregates an object of the component interface type.
+
+• But their purpose is di erent:
+• Composite structures objects into tree hierarchies, to treat a group
+of objects the same as a single instance.
+
+• Decorators dynamically add responsibilities to a single object,
+to extend behaviour without modifying the original object.
+
+ff
+
+34
+
+DECORATOR vs COMPOSITE
+• Consider the Building/Door example from last class.
+• Both Building and Door are MapObjects, and a Building
+aggregates a single Door.
+
+• But it could aggregate more things: more doors, or other kinds of
+MapObjects.
+
+• It delegates to whichever is most appropriate depending on the
+user's movement.
+
+• The Building does not modify the door's behaviour; its
+primary purpose is larger than a single door.
+35
+
+DECORATOR pattern
+
+• In the decorator class, the implementations of the
+
+interface methods will delegate the call to the same
+method on the aggregated object, and then implement
+their special functionality.
+
+• Each decorator class will add a di erent functionality.
+• E.g., LoggingDecorator, MemorizingDecorator, Shu ingDecorator.
+
+ffl
+
+ff
+
+36
+
+DECORATOR pattern
+Important to set the component eld (aElement) to nal, because
+we don't want to suddenly start decorating a di erent object.
+public class MemorizingDecorator implements CardSource {
+private final CardSource aElement;
+private final List<Card> aDrawnCards = new ArrayList<>();
+public MemorizingDecorator(CardSource pCardSource) {
+aElement = pCardSource;
+}
+public boolean isEmpty() {
+return aElement.isEmpty();
+}
+public Card draw() {
+Card card = aElement.draw(); // delegate to decorated object
+aDrawnCards.add(card); // implement the decoration
+return card;
+}
+}
+
+fi
+
+ff
+
+fi
+
+37
+
+Combining decorators
+
+• We can easily combine decorations, by having a
+
+decorator aggregate another decorator as its component
+object (i.e., decorate another decorator).
+
+• Decorations must be independent and strictly additive (and not
+remove any functionality), otherwise this wouldn't work.
+
+38
+
+Combining decorators
+
+39
+
+Decorators and identity
+
+• A decorator object aggregates its undecorated object;
+
+it is not the same object, so we should be aware of this
+when using the == operator if we don't override it.
+
+40
+
+Another example
+
+• Co ee!
+
+ff
+
+41
+
+Composite + Decorator
+
+• We can combine the Composite and Decorator patterns if
+we like, as long as the composite and decorator classes
+implement the same component interface.
+
+42
+
+Composite + Decorator
+
+43
+
+Composite + Decorator
+
+44
+
+Composite + Decorator
+The classic scenario: a picture drawing app
+
+45
+
+Composite + Decorator
+public void draw() { // for composite
+for (Figure figure : aFigures) {
+figure.draw();
+}
+}
+public void draw() { // for decorator
+aFigure.draw();
+// Additional code to draw the border
+}
+
+46
+
+Polymorphic copying
+
+• The designs that we've seen recently involve
+
+combinations of objects in elaborate object diagrams.
+
+• One implication of this has to do with object copying.
+
+47
+
+Polymorphic copying
+• We've seen that we can implement a copy constructor to
+make a copy. But to use such a constructor, we must
+specify a particular type, which can be a problem when
+using polymorphism:
+
+List<CardSource> sources = ...;
+List<CardSource> copy = new ArrayList<>();
+for (CardSource source : sources) {
+copy.add(???); // which constructor to call?
+}
+
+48
+
+Polymorphic copying
+CardSource copy = null;
+if (source.getClass() == Deck.class) {
+copy = new Deck((Deck) source);
+} else if (source.getClass() == CardSequence.class) {
+copy = new CardSequence((CardSequence) source);
+} else if (source.getClass() == CompositeCardSource.class) {
+copy = new CompositeCardSource((CompositeCardSource) source);
+}
+...
+
+Voids the bene t of polymorphism, which is to work with instances
+of CardSource no matter what their actual concrete type is.
+Also: an example of the Switch Statement anti-pattern.
+Also: The CompositeCardSource copy
+constructor would need to have the same pattern.
+fi
+
+49
+
+Polymorphic copying
+
+• Polymorphic copying: Make copies of objects without
+knowing the concrete type of the object.
+
+50
+
+References
+
+• Robillard ch. 6.3-6.6 (p. 137-147)
+• Exercises #2-12: https://github.com/prmr/DesignBook/blob/master/
+exercises/e-chapter6.md
+
+51
+
+Coming up
+
+• Next lecture:
+• More about composition
+
+52
+
+

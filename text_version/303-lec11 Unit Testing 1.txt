@@ -1,0 +1,311 @@
+COMP 303
+Lecture 11
+
+Unit testing
+Class will start at 2:35 p.m.
+Winter 2025
+slides by Jonathan Campbell
+© Instructor-generated course materials (e.g., slides, notes, assignment or exam questions, etc.) are protected by law and may not
+be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of
+copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.
+
+Announcements
+
+• Review guidelines out
+• TAs are grading proposals
+• https://brutecat.com/articles/leaking-youtube-emails
+
+2
+
+Today
+• Law of Demeter
+• Unit testing
+• Introduction to unit testing and JUnit
+• Metaprogramming (re ection): Class<T>
+• Stubs & test coverage
+• PyUnit
+
+fl
+
+3
+
+Recap
+
+Polymorphic copying
+All implementing
+classes must supply a
+copy() operation.
+
+5
+
+PROTOTYPE pattern
+Prototype: the abstract element
+(typically an interface) whose
+concrete prototype must be
+instantiated at runtime.
+
+Products: the objects that can be
+created by copying the prototype.
+6
+
+COMMAND pattern
+
+Each piece of functionality is de ned in its own class,
+which implements a Command interface.
+fi
+
+7
+
+Commands in the project
+
+• Command, ChatCommand and MenuCommand.
+• Design choices
+
+8
+
+The Law of Demeter
+
+Delegation chains
+
+10
+
+Delegation chains
+aFoundations.getPile(FIRST).getCards().add(pCard);
+
+fi
+
+fi
+
+In this design, the GameModel is in charge of adding a Card to a speci c
+List<Card>, even though that eld is stored several layers deep.
+
+Delegation chains
+aFoundations.getPile(FIRST).getCards().add(pCard);
+
+fi
+
+fi
+
+Violates the principle of information hiding:
+the GameModel must know about how the Foundations object manages its pile,
+In this design, the
+GameModel
+is is
+in acharge
+of adding a Card to a
+and
+that that pile
+CardStack,
+speci c List<Card>,
+even
+if that eld
+is stored
+several layers deep.
+and that that
+CardStack
+contains
+a List<Card>.
+
+Delegation chains
+aFoundations.add(pCard);
+
+MESSAGE CHAIN anti-pattern.
+
+fi
+
+fi
+
+Violates the principle of information hiding:
+the GameModel must know about how the Foundations object manages its pile,
+In this design, the
+GameModel
+is is
+in acharge
+of adding a Card to a
+and
+that that pile
+CardStack,
+speci c List<Card>,
+even
+if that eld
+is stored
+several layers deep.
+and that that
+CardStack
+contains
+a List<Card>.
+
+Law of Demeter
+• The following line:
+aFoundations.getPile(FIRST).getCards().add(pCard);
+
+• calls the getCards method on an object returned by a
+method. Not good! Instead, we would prefer to write:
+
+aFoundations.add(pCard, FIRST);
+
+• after de ning the appropriate method in the Foundations
+class. In general, to respect the Law and only use our
+own elds, we have to de ne additional methods.
+
+fi
+
+fi
+
+fi
+
+14
+
+Law of Demeter
+
+15
+
+Law of Demeter
+• Code in a method should only access:
+• the instance variables of its implicit parameter (this);
+• the arguments passed to the method;
+• any new object(s) created within the method;
+• (if need be) globally available objects.
+
+16
+
+Unit testing
+
+Testing & unit testing
+
+• Testing: Check that code works properly.
+• Unit testing: Write little tests, one per every behaviour /
+edge case ("unit") of a method.
+
+• When we change the method later on, we can re-run all
+the tests that we've written, to make sure it still works.
+
+18
+
+Components of a unit test
+
+• UUT: The unit under test. E.g., the method.
+• Input data: The arguments to the method. Also, the
+implicit argument (this/self).
+
+• Expected result ("oracle"): what the method should return.
+
+19
+
+Example: testing Math.abs
+
+• UUT: Math.abs(int)
+• Input data: 5
+• Expected result ("oracle"): 5
+
+20
+
+Example: testing sameColorAs
+public enum Suit {
+CLUBS, DIAMONDS, SPADES, HEARTS;
+public boolean sameColorAs(Suit pSuit) {
+assert pSuit != null;
+// if even, black suit; if odd, red suit.
+return (this.ordinal() - pSuit.ordinal()) % 2
+== 0;
+}
+}
+
+21
+
+Example: testing sameColorAs
+
+public static void main(String[] args) {
+boolean oracle = false;
+// UUT: Suit.sameColorAs
+// Input: CLUBS (implicit arg.); HEARTS (explicit arg.)
+// Expected result: false
+System.out.println(oracle == CLUBS.sameColorAs(HEARTS));
+}
+
+22
+
+Regression testing
+
+• Re-running tests to make sure that was correct is still
+correct after some change was made to a method.
+
+• E.g., if we re-order the suits in the Suit enum, our test will fail.
+
+(Because sameColorAs relies on an undocumented and unchecked
+assumption about the order!)
+
+23
+
+Exhaustive testing
+• Testing all possible combinations of arguments.
+• For sameColorAs, we would try each combination of
+implicit and explicit Suit (4*4 = 16 combinations).
+
+• Almost never possible. Unit testing cannot verify code to
+be completely correct. (For that, we need formal
+veri cation methods.)
+
+fi
+
+24
+
+JUnit
+
+Unit testing frameworks
+• Automatic software testing is typically done using a unit
+testing framework.
+
+• These frameworks automate running the tests, reporting
+the results of tests, and have other nice things.
+
+• In Java, the most popular such framework is JUnit. We
+will cover the basics of it.
+
+26
+
+Unit tests in JUnit
+@Test: indicates that the annotated
+method should be run as a unit test
+
+public class AbsTest {
+@Test
+public void testAbs_Positive() {
+assertEquals(5, Math.abs(5));
+}
+@Test
+public void testAbs_Negative() {
+assertEquals(5, Math.abs(-5));
+}
+@Test
+public void testAbs_Max() {
+assertEquals(Integer.MAX_VALUE,
+Math.abs(Integer.MIN_VALUE));
+}
+assert method: Will check the given argument(s),
+}
+and report a failure if appropriate.
+27
+
+Unit tests in Unit
+
+28
+
+References
+
+• Robillard ch. 6.9 (p.153-156)
+• Exercises #17, 19: https://github.com/prmr/DesignBook/blob/
+master/exercises/e-chapter6.md
+
+• Robillard ch. 5-5.2 (p. 99-104)
+
+29
+
+Coming up
+
+• Next lecture:
+• More about unit testing
+
+30
+
+

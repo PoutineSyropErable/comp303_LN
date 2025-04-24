@@ -1,0 +1,684 @@
+COMP 303
+Lecture 4
+
+Types & polymorphism
+Winter 2025
+slides by Jonathan Campbell, adapted in part from those of Prof. Jin Guo
+© Instructor-generated course materials (e.g., slides, notes, assignment or exam questions, etc.) are protected by law and may not
+be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of
+copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.
+
+Announcements
+• Teams: deadline Thursday
+• If you made an Ed post and found a partner, please resolve the post.
+• If you would like to be matched with partners, please make a private
+post.
+
+• Instructions will be sent out later today about registering.
+
+• Proposal instructions coming out next Monday.
+2
+
+Plan for today
+• Recap from last time
+• TicTacToe continued
+• Types & polymorphism II
+• More about generics
+• Collections.shu e and sort
+• Comparable<T> interface
+• Strategy design pattern
+• Class diagrams
+ffl
+
+3
+
+Recap
+
+TicTacToe
+
+• Implementation
+• Integrating into project
+
+5
+
+Inheritance vs. interfaces
+• Inheritance:
+• for functionality that is shared between classes (is-a relationship).
+• E.g., a dog is a mammal.
+
+• Interfaces:
+• for a shared behaviour that is implemented di erently in each
+implementing class (subtype).
+
+• E.g.: a bird and a bat can both y, but they do so di erently,
+and a bird is not a mammal while a bat is.
+
+ff
+
+ff
+
+fl
+
+6
+
+Polymorphism
+• There are di erent types of polymorphism:
+• subclass polymorphism: when a class inherits from a parent class,
+then it can look like the parent class. (We will talk about this later.)
+
+• subtype polymorphism: more general than the above, and includes
+the case when a class implements an interface (so it can look like
+that interface) -- meaning that it implements all the operations in it.
+
+• parametric polymorphism: when a function is written that can
+
+operate on multiple types, e.g., in Python, or using generics in Java
+or templates in C++.
+
+ff
+
+7
+
+Types & polymorphism
+
+Generics
+
+• Allows a type parameter to be speci ed when de ning a
+
+method, class or interface, which allows objects matching
+the given type to be accepted.
+
+fi
+
+fi
+
+9
+
+Generics: Pair
+public class Pair<T>
+{
+final private T aFirst;
+final private T aSecond;
+public Pair(T pFirst, T pSecond)
+{
+aFirst = pFirst;
+aSecond = pSecond;
+}
+
+}
+
+public T getFirst() { return aFirst; }
+public T getSecond() { return aSecond; }
+
+10
+
+Generics: Pair
+public class Pair<T>
+{
+final private T aFirst;
+final private T aSecond;
+
+Pair<Card> cards;
+
+public Pair(T pFirst, T pSecond)
+{
+aFirst = pFirst;
+aSecond = pSecond;
+}
+
+}
+
+public T getFirst() { return aFirst; }
+public T getSecond() { return aSecond; }
+
+11
+
+Generics: Pair
+public class Pair<T extends Deck>
+{
+final private T aFirst;
+final private T aSecond;
+public Pair(T pFirst, T pSecond)
+{
+aFirst = pFirst;
+aSecond = pSecond;
+}
+
+}
+
+public T getFirst() { return aFirst; }
+public T getSecond() { return aSecond; }
+
+12
+
+Generics: Pair
+
+public class Pair<T extends Deck>
+{
+public boolean isTopCardSame()
+{
+Card topCardInFirst = aFirst.draw();
+Card topCardInSecond = aSecond.draw();
+return topCardInFirst.equals(topCardInSecond);
+}
+}
+
+13
+
+Collections class
+
+• https://docs.oracle.com/javase/8/docs/api/java/util/
+Collections.html
+
+14
+
+Collections.shuf e
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void shuffle() {
+Collections.shuffle(aCards);
+}
+}
+
+fl
+
+15
+
+Collections.shuf e
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void shuffle() {
+Collections.shuffle(aCards);
+}
+}
+Collections.shu e works with any List<T> object.
+Very reusable!
+
+fl
+
+ffl
+
+16
+
+Collections.shuf e
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void shuffle() {
+Collections.shuffle(aCards);
+}
+}
+Collections.shu e works with any List<T> object.
+Very reusable!
+Example of parametric polymorphism.
+
+fl
+
+ffl
+
+17
+
+Collections.sort?
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void sort() {
+Collections.sort(aCards); // ?
+}
+}
+
+18
+
+Collections.sort
+
+• Collections.sort tries to compare the elements in the list in
+order to sort them. Thus, it needs to know a little
+something about the type.
+
+• In particular, it compares by calling compareTo on each object.
+
+19
+
+Comparable<T>
+
+• Java de nes a Comparable<T> interface that we can
+
+implement; this interface speci es the compareTo
+method. After doing so, we can then call Collections.sort!
+
+• An example of subtype polymorphism.
+
+fi
+
+fi
+
+20
+
+Comparable<T>
+public interface Comparable<T>
+{
+/*
+* Returns a negative integer, zero, or a
+* positive integer if this object is less
+* than, equal to, or greater than the
+* specified object, respectively.
+*/
+int compareTo(T o);
+}
+
+21
+
+Interfaces
+• In general, interfaces should capture the smallest
+
+cohesive slice of behaviour that is expected to be used
+by client code.
+
+• Cohesive: a set of operations that are logically and conceptually
+related, which will all be used by implementing classes.
+
+• This principle is tied to separation of concerns: the idea
+that each part of a system should handle a single
+responsibility.
+
+• One of the advantages of encapsulation.
+22
+
+Comparing cards
+
+public class Card implements Comparable<Card> {
+public int compareTo(Card pCard) {
+// compare the cards
+}
+}
+
+23
+
+Comparing cards
+
+public class Card implements Comparable<Card> {
+public int compareTo(Card pCard) {
+return aRank.compareTo(pCard.aRank);
+}
+}
+
+24
+
+Comparing cards
+
+• What if we wanted to be able to compare in di erent
+
+ways? For example, compare by suit, rank, or suit and
+then rank?
+
+ff
+
+25
+
+Comparing cards
+public class Card implements Comparable<Card> {
+enum ComparisonStrategy {ByRank, BySuit, ByRankThenSuit}
+ComparisonStrategy aStrategy; // set in constructor
+public int compareTo(Card pCard) {
+switch (aStrategy) {
+case ByRank:
+return compareByRank(pCard);
+case BySuit:
+return compareBySuit(pCard);
+case ByRankThenSuit:
+return compareByRankThenSuit(pCard);
+default:
+throw new IllegalStateException("Unexpected
+comparison strategy: " + aStrategy);
+}
+}
+}
+26
+
+Comparing cards
+public class Card implements Comparable<Card> {
+enum ComparisonStrategy {ByRank, BySuit, ByRankThenSuit}
+ComparisonStrategy aStrategy; // set in constructor
+public int compareTo(Card pCard) {
+switch (aStrategy) {
+case ByRank:
+return compareByRank(pCard);
+case BySuit:
+return compareBySuit(pCard);
+case ByRankThenSuit:
+return compareByRankThenSuit(pCard);
+default:
+throw new IllegalStateException("Unexpected
+comparison strategy: " + aStrategy);
+}
+}
+Anti-pattern: SWITCH STATEMENT
+}
+27
+
+Collections.sort
+
+static <T extends Comparable<? super T>> void
+sort(List<T> list)
+public static <T> void
+sort(List<T> list, Comparator<? super T> c)
+
+28
+
+Comparing cards
+
+public class ByRankComparator implements Comparator<Card>
+{
+public int compare(Card pCard1, Card pCard2) {
+return pCard1.getRank().compareTo(pCard2.getRank());
+}
+}
+
+29
+
+Comparing cards
+
+public class BySuitComparator implements Comparator<Card>
+{
+public int compare(Card pCard1, Card pCard2) {
+return pCard1.getSuit().compareTo(pCard2.getSuit());
+}
+}
+
+30
+
+Comparing cards
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void sort() {
+Collections.sort(aCards, new ByRankComparator());
+}
+}
+
+31
+
+STRATEGY design pattern
+• If we have a bunch of algorithms to accomplish a task,
+and want to switch between them exibly.
+
+• E.g., switching between di erent Card comparisons.
+• Or, di erent AI implementations for a card game bot.
+
+• The main idea is to be able to switch without the client
+needing to know the algorithm implementation; the
+algorithms should be interchangeable.
+
+fl
+
+ff
+
+ff
+
+32
+
+Comparing cards
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void sort() {
+Collections.sort(aCards, new ByRankComparator());
+}
+}
+
+33
+
+Comparing cards
+
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+public void sort() {
+Collections.sort(aCards, new BySuitComparator());
+}
+}
+
+34
+
+Comparing cards
+public class Deck {
+private List<Card> aCards = new ArrayList<>();
+private Comparator<Card> aComparator;
+public Deck(Comparator<Card> pComparator) {
+aComparator = pComparator;
+shuffle();
+}
+public void sort() {
+Collections.sort(aCards, aComparator);
+}
+}
+
+35
+
+STRATEGY design pattern
+
+36
+
+The S TRATEGY looks exceedingly simple. In fact in many cases it can be indistinguishable from a basic use of polymorphism. I find it useful to think of a part of
+the design as an application of S TRATEGY when that part of the design is focused on
+allowing the switch between algorithms. One example, illustrated in Figure 3.7, is
+the use of different card comparators for a deck of cards. Another example is the implementation of different automatic playing strategies, as will be further discussed
+in the Code Exploration section below.
+
+STRATEGY design pattern
+
+Fig. 3.7 Sample instantiation of a S TRATEGY
+
+Although nominally simple, in practice applying a S TRATEGY requires thinking
+37
+about many design questions:
+
+Python implementation
+
+• MovementStrategy for an NPC class.
+
+38
+
+Class diagrams
+
+39
+
+Class diagrams
+
+modelling attributes as
+aggregations
+omitting constructor and
+getter methods
+40
+
+Class diagrams
+
+41
+
+Class diagrams
+
+42
+
+Class diagrams
+
+43
+
+Comparators as top-level classes
+
+public class ByRankComparator implements Comparator<Card>
+{
+public int compare(Card pCard1, Card pCard2) {
+return pCard1.getRank().compareTo(pCard2.getRank());
+}
+}
+Won't have access to private Card elds.
+Have to use getter methods.
+
+fi
+
+44
+
+Comparators as nested classes
+
+public class Card
+{
+static class ByRankComparator implements Comparator<Card> {
+public int compare(Card pCard1, Card pCard2) {
+return pCard1.getRank().compareTo(pCard2.getRank());
+}
+}
+}
+// Collections.sort(aCards, new Card.CompareBySuitFirst());
+
+Now has access to private elds.
+
+fi
+
+45
+
+Comparators as anonymous classes
+
+public class Deck {
+public void sort() {
+Collections.sort(aCards, new Comparator<Card>() {
+public int compare(Card pCard1, Card pCard2) {
+/* Comparison code */
+}
+});
+}
+}
+Good if only used in one place.
+But, can't store state.
+
+46
+
+Comparators as anonymous classes
+
+public class Deck {
+public void sort() {
+Collections.sort(aCards, new Comparator<Card>() {
+public int compare(Card pCard1, Card pCard2) {
+/* Comparison code */
+}
+});
+}
+}
+Good if only used in one place.
+But, can't store state.
+
+No need for constructor since we
+are implementing an interface.
+47
+
+Nested class
+• A nested class is any class de ned inside another
+(including anonymous classes).
+
+• Why use them?
+• If a class is useful to only one other class, then it is logical to embed
+it into that class.
+
+• It increases encapsulation. By hiding class B inside class A, A's
+
+members can be declared private and B can access them; B itself
+can be hidden from the outside world.
+
+• It places code closer to where it is used.
+fi
+
+48
+
+Iterators
+
+public List<Card> getCards() {
+return Collections.unmodifiableList(aCards);
+}
+Even though it returns an unmodi able version
+(so no escaping reference),
+it still leaks the internal representation of a Deck.
+
+fi
+
+49
+
+ITERATOR design pattern
+
+• A mechanism to iterate over the elements stored in an
+
+aggregate object, e.g., the cards in a Deck, without
+exposing the internal representation (list, array, etc.).
+
+• It is done by implementing the Iterable<E> interface.
+
+50
+
+Iterators
+• Java classes like the ArrayList already implement Iterator<E>:
+List<String> stringList = new ArrayList<>();
+stringList.add("Apple");
+stringList.add("Banana");
+stringList.add("Cherry");
+Iterator<String> iterator = stringList.iterator();
+// Use the iterator to traverse the list
+while (iterator.hasNext()) {
+String element = iterator.next();
+System.out.println(element);
+}
+51
+
+Iterators
+• Java classes like the ArrayList already implement Iterator<E>:
+List<String> stringList = new ArrayList<>();
+stringList.add("Apple");
+stringList.add("Banana");
+stringList.add("Cherry");
+
+for (String string : stringList) {
+System.out.println(string);
+}
+52
+
+Implementing Iterable<E>
+public class Deck implements Iterable<Card>
+{
+private List<Card> aCards;
+public Iterator<Card> iterator() {
+return aCards.iterator();
+}
+}
+// later
+for (Card card : deck) {
+System.out.println(card);
+}
+53
+
+Iterator<E>
+• We haven't discussed exactly how iteration is done for
+the built-in types like ArrayList.
+
+• That's because, normally, when we want to iterate, we
+can just use the standard implementation.
+
+• But if we want to write our own iteration code, we can
+
+implement the Iterator<E> interface (not covered here).
+
+54
+
+References
+
+• Robillard ch. 3.2-3.7 (p. 46-60)
+• Exercises 1-10: https://github.com/prmr/DesignBook/blob/master/
+exercises/e-chapter3.md
+
+55
+
+Coming up
+
+• Next lecture:
+• More about types and polymorphism
+
+56
+
+

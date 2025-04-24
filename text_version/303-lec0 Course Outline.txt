@@ -1,0 +1,600 @@
+CONTENTS
+
+1
+
+COMP 303
+Software Design
+Course Outline
+Winter 2025
+Instructor:
+Jonathan Campbell
+jonathan.campbell@mcgill.ca
+
+Contents
+1 Overview
+
+3
+
+1.1
+
+Primary Learning Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+3
+
+1.2
+
+Course prerequisites . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+3
+
+2 Course materials
+
+4
+
+2.1
+
+Recordings, slides and exercises . . . . . . . . . . . . . . . . . . . . . . . . .
+
+4
+
+2.2
+
+Textbook and other references . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+4
+
+2.3
+
+Copyright policy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+4
+
+3 Communication policies
+
+4
+
+3.1
+
+Oﬃce hours . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+4
+
+3.2
+
+Ed Discussion board . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+5
+
+3.2.1
+
+Discussion board guidelines . . . . . . . . . . . . . . . . . . . . . . .
+
+5
+
+3.3
+
+Contacting the instructor and teaching assistants . . . . . . . . . . . . . . .
+
+6
+
+3.4
+
+Course announcements . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+6
+
+4 Methods of Evaluation & Grades
+4.1
+
+Midterm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+6
+6
+
+CONTENTS
+
+2
+
+4.2
+
+Final exam . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+6
+
+4.2.1
+
+Supplemental/deferred exam . . . . . . . . . . . . . . . . . . . . . .
+
+7
+
+Project . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+7
+
+4.3.1
+
+Project submissions . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+7
+
+4.3.2
+
+Late policy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+4.4
+
+Regrade requests . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+4.5
+
+Additional work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+4.6
+
+McGill Language Policy . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+8
+
+4.7
+
+Extraordinary circumstances beyond the University’s control . . . . . . . . .
+
+9
+
+4.3
+
+5 Policies on Academic Integrity
+
+9
+
+5.1
+
+Plagiarism policy . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+9
+
+5.2
+
+Getting help and partial credit . . . . . . . . . . . . . . . . . . . . . . . . .
+
+10
+
+5.3
+
+Plagiarism detection . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+10
+
+5.4
+
+Posting solutions on a website . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+10
+
+6 Land acknowledgement
+
+10
+
+7 Accommodations
+
+11
+
+7.1
+
+Student Accessibility and Achievement Oﬃce . . . . . . . . . . . . . . . . .
+
+11
+
+7.2
+
+Pregnancy and caregiving . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+11
+
+7.3
+
+Health and Wellness resources . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+11
+
+8 Campus Computer Laboratories
+
+11
+
+9 Course Topics
+
+11
+
+1 OVERVIEW
+
+3
+
+1 Overview
+Welcome to COMP 303! Please read this document carefully and keep it for reference
+throughout the term.
+This course provides an in-depth introduction to the discipline of software design for building
+realistic and high-quality software applications. It will focus on object-oriented programming
+techniques, and cover topics related to managing software complexity and verifying that they
+work as expected.
+
+1.1 Primary Learning Objectives
+By the end of this course, you should be able to:
+• Properly explain and apply general Design Principles (separation of concerns, encapsulation, substitutability, interface segregation, etc.) and important Design patterns.
+• Properly explain and apply design techniques such as UML Diagrams and Design by
+Contract.
+• Eﬀective use programming language mechanisms such as exception handling and reﬂection.
+• Analyze and evaluate the quality of design solutions; correctly identify design smells
+and apply appropriate refactoring to eliminate them.
+• Gain experience on software development tools such as modern IDEs, automatic documentation and testing tools, and version control system.
+
+1.2 Course prerequisites
+Students must have taken the following pre-requisite courses before taking this course:
+• COMP 250
+• COMP 206
+Students are also encouraged to take a self-assessment test to check if they have the necessary
+competencies.
+
+2 COURSE MATERIALS
+
+4
+
+2 Course materials
+2.1 Recordings, slides and exercises
+Lecture recordings and slides will be made available to students on myCourses. Note that
+recording quality is on a best-eﬀort basis, and students are strongly encouraged to attend
+the lectures in person.
+
+2.2 Textbook and other references
+Readings will be assigned at the end of most lectures from Introduction to Software
+Design with Java, 2nd ed., by Prof. Martin Robillard, available at no cost to McGill
+students through the McGill Library. There is also a companion website for the textbook
+which contains source code, exercises and solutions, and another which contains solutions
+annotated with extra explanations.
+We may also cite from The Pragmatic Programmer by David Thomas and Andrew Hunt
+and Eﬀective Java by Joshua Bloch.
+
+2.3 Copyright policy
+You are not allowed to post any course materials online, including but not limited to GitHub,
+Course Hero, or any other websites. Course materials include but are not limited to video
+recordings, PDFs of lecture slides, tutorials, recommended exercises, assignment questions,
+project code or anything else provided to you during the course.
+Stated more formally: Instructor/TA-generated course materials are protected by law and
+may not be copied or distributed in any form or in any medium without explicit permission of
+the instructor/TA. Infringements of copyright can be subject to follow up by the University
+under the Code of Student Conduct and Disciplinary Procedures.
+
+3 Communication policies
+3.1 Oﬃce hours
+Teaching Assistants (T.A.s) and the instructor will be available for oﬃce hours each week
+to help you with your work and answer questions about the course material.
+Oﬃce hours will be held either in person or through Zoom and will be individual (one-on-one).
+The oﬃce hour schedule will be shared with you in the ﬁrst weeks of the term. Feel free to
+attend as many of these oﬃce hours as you like, whichever best ﬁt with your schedule.
+
+3 COMMUNICATION POLICIES
+
+5
+
+3.2 Ed Discussion board
+We will be using Ed Discussions for class discussion. The system is designed to get you
+help fast and eﬃciently from classmates, the TAs and the instructor. Please post all
+your questions related to the course content and homework on Ed, rather than
+emailing questions to the teaching staﬀ. By using the discussion board, you will
+receive an answer faster, and everyone in the class will be able to beneﬁt from it.
+Ed Discussion allows you to post privately, if you are unsure that your post should be read
+by other students (e.g., because it might give away a solution). It also allows you to post
+anonymously if you do not wish to be identiﬁed for some reason.
+You may freely answer other students' questions as well, with one important exception: you
+may not provide solution code (although you are permitted to provide one or two lines of
+code to illustrate a point).
+You can access Ed Discussions through a link on our class' myCourses navigation bar.
+3.2.1 Discussion board guidelines
+We encourage you to share your knowledge and help each other out by answering your
+peers' questions on the discussion board. The instructor and TAs will try to moderate the
+discussion board, but it works best when students help each other out.
+When posting to the discussion board, please obey the following guidelines. Postings that
+do not conform may be deleted.
+• Search to see if your question has been asked before. Do not make duplicate posts.
+• Choose a suitable subject line, so that others know what the post is about.
+• If you have multiple unrelated questions, then use multiple postings.
+• Proofread before posting. Take an extra minute to ensure what you wrote makes sense.
+• Be polite and respectful.
+Formally and oﬃcially: The University is committed to maintaining teaching and learning
+spaces that are respectful and inclusive for all. To this end, oﬀensive, violent, or harmful
+language arising in contexts such as the following may be cause for disciplinary action:
+• Zoom sessions, including username (use only your legal or preferred name), virtual
+backgrounds, 'chat' boxes, whiteboard annotations, breakout rooms.
+• Ed Discussion board.
+• Other in-course venues of discussion.
+
+4 METHODS OF EVALUATION & GRADES
+
+6
+
+3.3 Contacting the instructor and teaching assistants
+For private matters, you can send email to a TA or to your instructor directly with 'COMP
+303' in the subject header. Be sure to send your email from your @mail.mcgill.ca address,
+and include your student ID. Email sent from non-McGill accounts may be spam-ﬁltered
+or simply ignored. A private matter may be, for example, if you are anxious about your
+performance in the class and would like to discuss it.
+When emailing a TA or instructor, please follow the guidelines on etiquette described in the
+video here and on this website.
+
+3.4 Course announcements
+Important course information will be announced in class and/or on myCourses and Ed
+Discussion. Please subscribe now to myCourses Announcements if you have not already
+done so. You are expected to monitor your McGill email, myCourses, and Ed Discussion for
+course-related news and information.
+
+4 Methods of Evaluation & Grades
+Our course grading scheme is as follows:
+• Midterm: 25%
+• Final Exam: 45%
+• Project: 30%
+Rounding: Final course grades will be rounded oﬀ to the nearest integer. If your grade is
+84.4 then it will round to 84 (A-), whereas if it is 84.6 then it will round to 85 (A). If your
+grade is 84.5, our formula will round it up to 85. The same rounding procedure holds for low
+grades. If your calculated ﬁnal course grade is 49.4 then it will round to 49 (F). We draw a
+very hard line here, so if you don't want to fail then you should stay far away from that line.
+
+4.1 Midterm
+The midterm will take place in the middle of the term, likely during the week after the Study
+Break (March 10-14). The exact date and time will be conveyed to you closer to the date.
+
+4.2 Final exam
+The ﬁnal exam will take place during the ﬁnal exam period. It will be worth 45%, but if
+you do better on it than you do on the midterm, then the midterm will be worth 0% and
+the ﬁnal exam will be worth 70%.
+
+4 METHODS OF EVALUATION & GRADES
+
+7
+
+4.2.1 Supplemental/deferred exam
+Under certain conditions, you may be eligible to write the Supplemental/Deferred exam.
+This exam will cover the same material as the Final Exam. For those writing the Deferred
+Exam, the exam grade will simply replace the Final Exam grade. For those writing the
+Supplemental Exam, a new grade will appear on your transcript which is calculated as
+follows: the Supplemental exam grade will replace the Final Exam grade, and your pre-existing midterm/project grades will be used (and hence double counted in the GPA). For
+more information on Supplemental and Deferred exams, see here.
+
+4.3 Project
+The project will be done in teams of 3, though it will be possible to work alone or in a team
+of 2. The project will be worth 30% of your grade and will have deadlines that must be met
+throughout the term.
+The ﬁrst deadline will be Monday, January 20, at which point teams must be registered. The
+registration process will be detailed to you in class in the days leading up to the deadline.
+Teams must work together for the remainder of the term, and all partners in the team will
+typically receive the same grade.
+Here are approximate weeks during which work will be due. Exact deadlines will be communicated to you on the posting of each part.
+• Week of Jan. 20: Team forming deadline
+• Week of Feb. 3: Project proposal deadline
+• Week of Feb. 10: Reviews of project proposal due
+• Week of Mar. 10: Halfway mark
+• Week of Mar. 31/Apr. 7: Final demo and project submision
+4.3.1 Project submissions
+Project submission will take place through a system to be described by the instructor at or
+around the posting of the project proposal guideline document.
+You are responsible for verifying that your submissions are successful. If you believe the
+content of your submission is diﬀerent from what you have submitted, you must email your
+instructor preferably within a few days of the deadline and provide evidence of your correct
+submission.
+Furthermore, once grades for an assessment are released, it is your responsibility to check
+that your grades are correct and to notify your instructor of any errors.
+
+4 METHODS OF EVALUATION & GRADES
+
+8
+
+4.3.2 Late policy
+Unforeseen events may arise that prevent you from submitting work on time. For example,
+you might be sick for several days in the week before the deadline. Our standard late policy
+is that you may submit up to two days after the deadline, but with a small penalty: we will
+deduct 10% each day for which they are late, including weekends and holidays; that is, work
+that is between 0 and 24 hours late will be deducted 10 points, and work that is between 24
+and 48 hours late will be deducted 20 points. We are willing to waive this penalty in cases
+of extended illness or other unforeseen personal circumstances. However, you must make a
+formal request (see section 3.3 for email policy).
+Examples of invalid requests are:
+• Your laptop broke or was stolen. This is not a valid excuse. You should be using a
+cloud backup system, e.g., Dropbox, Google Drive, etc., to be able to access a version
+of your ﬁle.
+• You have other exams, a job interview, etc. These are invalid because they are not
+unexpected and you have two weeks to complete your assigned work. It is your responsibility to plan accordingly.
+Work submitted more than 2 days after the deadline will not be accepted, nor graded, and
+will therefore receive a grade of 0.
+Plan appropriately and do not submit only minutes before the deadline. Requests for waiving
+the late penalty because the system was busy or your machine/internet was too slow will not be
+accepted. Individual exceptions to the lateness policy will not be granted without appropriate
+justiﬁcation submitted in writing and supported by documentary evidence.
+
+4.4 Regrade requests
+If you believe that you have been assigned an incorrect grade for one of your assessments,
+you can request a regrade. Only well-argumented requests will be considered. You may
+request a regrade within only 7 days from when your grade was published. Requests after the
+deadline will not be considered.
+
+4.5 Additional work
+Students who receive unsatisfactory ﬁnal grades will NOT have the option to submit additional work to improve their grades.
+
+4.6 McGill Language Policy
+In accordance with McGill University's Charter of Students' Rights, students in this course
+have the right to submit in English or in French any written work that is to be graded.
+
+5 POLICIES ON ACADEMIC INTEGRITY
+
+9
+
+Conformément à la Charte des droits de l’étudiant de l’Université McGill, chaque étudiant
+a le droit de soumettre en français ou en anglais tout travail écrit devant être noté.
+
+4.7 Extraordinary circumstances beyond the University’s control
+In accordance with section 3.2.3 of the University Student Assessment Policy, in the event
+of extraordinary circumstances beyond the University’s control, the evaluation scheme in a
+Course is subject to change, provided that there be timely communications to the students
+regarding the change.
+
+5 Policies on Academic Integrity
+Oﬃcial policy: McGill University values academic integrity. All students must understand
+the meaning and consequences of cheating, plagiarism, and other academic oﬀences under
+the Code of Student Conduct and Disciplinary Procedures (see https://www.mcgill.ca/
+integrity/ for more information).
+
+5.1 Plagiarism policy
+You must include your name and McGill ID number at the top of each code ﬁle that you
+implement and submit. By doing so, you are certifying that the program or module is entirely
+your own, and represents only the result of your own eﬀorts.
+Work submitted for this course must represent your own eﬀorts. The project must be done
+with your registered team; you must not work with anyone else. Do not ask friends or
+tutors to do your work for you. You must not copy any other person's work in any manner
+(electronically or otherwise), even if this work is in the public domain or you have permission
+from its author to use it and/or modify it in your own work (obviously, this prohibition does
+not apply to source code supplied by the instructor explicitly for this purpose). To be clear,
+you must not copy or view any code from any source, online or otherwise, except the code
+written by the instructor during lectures. Furthermore, you must not give a copy of your
+work to any other person.
+The plagiarism policy is not meant to discourage interaction or discussion among students.
+You are encouraged to discuss course and/or project questions with the instructor, TAs and
+your fellow students. There is no better way to learn than through discussion with your
+peers. You are also encouraged to help each other out with debugging problems, especially
+with the basic mechanics of debugging, such as how to make the best use of an IDE. Finally,
+you are highly encouraged to post questions on Ed and to answer each other’s questions
+there as well. However, there is a diﬀerence between discussing ideas and working in groups
+or copying someone else's solution. Your discussion should never go so far that you are
+revealing the solutions to each other. Sharing code is absolutely forbidden. The solution
+code that you submit must be your own work. A good rule of thumb is that when you
+
+6 LAND ACKNOWLEDGEMENT
+
+10
+
+discuss projects with your fellow students, you should not leave the discussion with written
+notes. Also, when you write your solution, you must do it on your own.
+
+5.2 Getting help and partial credit
+Students who require assistance should see a TA or the instructor during oﬃce hours or
+make use of the Ed discussion board. If you have only partially ﬁnished part of the project,
+comment out the parts that do not work, and submit what you managed to complete for
+partial credit.
+Code ﬁles that do not run at all (syntax or runtime errors) will be heavily penalized and
+almost certainly result in a grade of zero, so make sure to submit only working code, even if
+it does not fully satisfy the project requirements.
+
+5.3 Plagiarism detection
+We will be using automated code similarity detection tools to compare your project submissions to that of all other students registered in the course. These tools are cutting-edge and
+are very eﬀective at their job. However, we will not accuse anyone of copying based solely
+on the output of these tools. Rather, we will use these tools to determine which submissions
+should be manually checked for similarity by the TA and instructor.
+When the instructor suspects that plagiarism has occurred, the instructor will report the case
+to the Disciplinary Oﬃcer in the student’s Faculty (Science, Arts, Engineering, etc). For
+more details on the process, see Section III Articles A.37 (p. 10) and A.48 (p. 13) of the
+Code of Student Conduct and Disciplinary Procedures, which can be found here.
+
+5.4 Posting solutions on a website
+You must not share your solutions by posting them on a public space such as GitHub,
+CourseHero, etc. This rule extends beyond the duration of the course. The reason for the
+rule is that instructors occasionally recycle assignments from previous years, and if the old
+versions are easily accessible then such posting can lead to plagiarism by others.
+
+6 Land acknowledgement
+McGill University is on land which has long served as a site of meeting and exchange amongst
+Indigenous peoples, including the Haudenosaunee and Anishinabeg nations. We acknowledge
+and thank the diverse Indigenous people whose footsteps have marked this territory on which
+people of the world now gather. Please see here for more details.
+
+7 ACCOMMODATIONS
+
+11
+
+7 Accommodations
+7.1 Student Accessibility and Achievement Oﬃce
+If you require accommodations, the Accessibility and Achievement Oﬃce is here to help.
+This Oﬃce liaises with your instructor on your behalf to ensure that your accommodations
+are met and that you can succeed in your studies.
+
+7.2 Pregnancy and caregiving
+Students who are pregnant and/or caring for a dependent may ﬁnd it helpful to receive
+academic accommodations. McGill's guidelines for accommodations for students who are
+pregnant and/or caring for a dependent may be found here.
+
+7.3 Health and Wellness resources
+The academic environment at McGill is challenging. Our terms are intensive, and classes
+are not the only demanding part of your life. Student well-being is a priority for McGill. If
+you need to access services for health and wellness, or if you want to get more information,
+please consult our Student Wellness Hub at here, or drop by the Brown Student Services
+Building (downtown) or Centennial Centre (Macdonald Campus). Within your faculty, you
+can also connect with your Local Wellness Advisor (to make an appointment, visit here).
+
+8 Campus Computer Laboratories
+All students registered in COMP 303 may use the School of Computer Science (SOCS)
+computer laboratory facilities to do their work regardless of the program in which they are
+registered. These facilities are located on the third ﬂoor of the Trottier building. You can
+refer to here for more information on the SOCS computer laboratory facilities.
+You may also use other computer laboratory facilities on campus to do your work. Most
+facilities are available to all students, but there are facilities which grant usage privileges only
+to students registered in a course or program oﬀered by the faculty or department which
+manages the facility. Students should contact the work area of their choice to inquire about
+access requirements, opening hours, or any further information such as software availability.
+
+9 Course Topics
+The following is a tentative and non-exhaustive schedule of topics. The exact ordering and
+number of weeks per topic will likely shift as the semester unfolds.
+
+9 COURSE TOPICS
+Week
+
+Topics
+
+1-2
+
+Encapsulation
+
+2-3
+
+Types & polymorphism
+
+4
+
+Object state
+
+5
+
+Design for robustness
+
+6
+
+Unit testing
+
+7-8
+
+Composition
+
+9-10
+
+Inheritance
+
+10-11
+
+Inversion of control
+
+12
+
+Concurrency
+
+13
+
+Review
+Project demos
+
+12
+Notes
+
+Midterm
+
+

@@ -1,0 +1,539 @@
+COMP 303
+Lecture 19
+
+Inversion of control III
+Winter 2025
+slides by Jonathan Campbell
+© Instructor-generated course materials (e.g., slides, notes, assignment or exam questions, etc.) are protected by law and may not
+be copied or distributed in any form or in any medium without explicit permission of the instructor. Note that infringements of
+copyright can be subject to follow up by the University under the Code of Student Conduct and Disciplinary Procedures.
+
+Announcements
+• Next team survey to be posted soon, due this Friday
+• Tutorial / group coding
+• Midterm grades
+• Final exam questions
+• Schedule of remaining lectures / nal demo / awards
+• Special trees
+fi
+
+2
+
+3
+
+4
+
+5
+
+Inversion of control
+
+• Observer pattern
+• GUI
+• Event handling (today)
+
+• Visitor pattern (today)
+
+6
+
+Recap
+
+OBSERVER: design decisions
+• What callback methods to implement.
+• What data ow strategy (push, pull, none or both).
+• How to connect observers with the model (data as
+parameter, Model as parameter, or ModelData).
+
+• How to call notify (inside state-changing methods, or
+leave it up to the client to do so).
+
+fl
+
+8
+
+Example: observable CardStack
+
+Counter: reports the number of
+cards in the stack at any point.
+Ace Detector: detects whether an
+ace is added to the stack.
+9
+
+Design with inheritance
+
+10
+
+Design with pull data ow
+CardStackView: like CardStack, but with only getter methods.
+
+fl
+
+11
+
+Single callback, push+pull
+
+12
+
+Example on project server
+
+• Keybinds are callback methods.
+
+13
+
+GUI
+• GUI: Graphical user interface.
+• Makes heavy use of Observer pattern.
+• Split into two parts:
+• framework code: consisting of a component library (reusable types
+and interfaces that provide typical GUI functionality like buttons,
+windows, etc.) and application skeleton (low-level aspects of GUIs
+such as monitoring events).
+
+• application code: using the framework code, a GUI for a particular
+application is built.
+
+14
+
+Application code
+• Application code can be split into two parts:
+• the component graph: the actual UI - buttons, etc. Organized as a
+tree (buttons go on windows, etc.).
+
+• Heavy use of the Composite and Decorator patterns.
+• the event handling code: the code to execute when a button is
+clicked, when the mouse is moved around, etc. ("events").
+
+• Application of the Observer pattern.
+15
+
+Event handling
+
+Event handling
+
+• Once the framework is launched, an event loop begins,
+
+monitoring input events and checking whether they map
+to events that can be observed by application code.
+
+17
+
+Event handling
+
+18
+
+Events
+
+• Events are typically de ned by the component library.
+• E.g., TextField de nes an event that occurs when the user types the
+[enter] key.
+
+• After we instantiate a component, we must create and
+register an event handler: the code that will execute
+when this event occurs.
+
+fi
+
+fi
+
+19
+
+Event handlers
+public class IntegerPanel extends Parent implements Observer {
+private TextField aText = new TextField();
+private Model aModel;
+setOnAction: registering
+public IntegerPanel(Model pModel) {
+aModel = pModel;
+a new event handler
+aModel.addObserver(this);
+aText.setText(new Integer(aModel.getNumber()).toString());
+getChildren().add(aText);
+aText.setOnAction(new EventHandler<ActionEvent>() {
+public void handle(ActionEvent pEvent) {
+de ning an anonymous
+int number;
+class, subtype of
+try {
+number = Integer.parseInt(aText.getText());
+EventHandler
+} catch(NumberFormatException pException ) {
+number = 1;
+}
+handle method will be called
+aModel.setNumber(number);
+when the event occurs.
+}
+});
+}
+}
+
+fi
+
+20
+
+Event handlers
+class IntegerPanel(tk.Frame):
+def __init__(self, parent, model):
+super().__init__(parent)
+self.__aModel = model
+self.__aModel.add_observer(self)
+self.__aText = tk.Entry(self)
+self.__aText.insert(0, str(self.__aModel.get_number()))
+self.__aText.pack()
+bind: registering a new event handler
+self.__aText.bind("<Return>", self.on_enter)
+def on_enter(self, event): de ning a method taking an event parameter
+try:
+number = int(self.__aText.get())
+method will be called when
+except ValueError:
+the event occurs.
+number = 1
+self.__aModel.set_number(number)
+
+fi
+
+21
+
+VISITOR pattern
+
+CardSource
+
+CompositeCardSource
+has a narrow interface.
+
+Deck is
+shu eable.
+
+We can get
+size() of a
+CardSequence.
+
+Three di erent types of CardSources, each
+having slightly di erent methods.
+
+ff
+
+ff
+
+ffl
+
+23
+
+Adding methods to CardSource
+• What if we want all CardSources to have more methods,
+such as print, size, remove(Card) and contains(Card)?
+
+• We could add all these methods to the CardSource
+
+interface. Then all subclasses would need to implement
+them. But:
+
+• The interface of CardSource would get much larger.
+• We may not use all the methods in all subclasses, which would
+
+violate the ISP. If we just think we may use it in future, then it is a
+case of SPECULATIVE GENERALITY.
+24
+
+Solution: VISITOR pattern
+accept method in
+element interface
+
+New interface
+for Visitor
+
+25
+
+Visitor subclasses
+each implement
+some behaviour
+
+VISITOR pattern
+• Solution: VISITOR pattern.
+• Idea: De ne functionality (like contains(Card)) in its
+own class.
+
+• Three parts:
+• Abstract Visitor interface
+• Concrete Visitors (one for each behaviour)
+• accept methods in element subtypes
+fi
+
+26
+
+Abstract visitor
+
+public interface CardSourceVisitor {
+void visitCompositeCardSource(CompositeCardSource pSource);
+void visitDeck(Deck pDeck);
+void visitCardSequence(CardSequence pCardSequence);
+// ...
+}
+
+A visit method for every di erent element subclass.
+
+ff
+
+27
+
+Concrete visitor
+public class PrintingVisitor implements CardSourceVisitor {
+public void visitCompositeCardSource(CompositeCardSource pSource)
+{}
+public void visitDeck(Deck pDeck) {
+for (Card card : pDeck) {
+System.out.println(card);
+}
+}
+
+A concrete visitor for every di erent behaviour.
+
+28
+ff
+
+}
+
+public void visitCardSequence(CardSequence pCardSequence) {
+for (int i = 0; i < pCardSequence.size(); i++) {
+System.out.println(pCardSequence.get(i));
+}
+}
+
+Visitors
+• In a classic design, code to implement behaviours like
+
+printing, getting size, etc., would be scattered throughout
+the three CardSource classes.
+
+• Here, all the code for a speci c behaviour is located in a
+single class.
+
+• An organization of code in terms of functionality instead of data.
+
+fi
+
+29
+
+Integrating the visitors
+
+• We've de ned a class that encapsulates a well-de ned
+
+operation. But we still have to somehow integrate it with
+our actual element interface (e.g., CardSource) and
+subclasses.
+
+• We will de ne a method accept, that takes an object of the abstract
+visitor type.
+
+fi
+
+fi
+
+fi
+
+30
+
+Integrating the visitors
+
+public interface CardSource {
+Card draw();
+boolean isEmpty();
+void accept(CardSourceVisitor pVisitor);
+}
+
+31
+
+Integrating the visitors
+• The accept method will simply call the relevant visit method on
+the visitor.
+
+public class Deck {
+public void accept(CardSourceVisitor pVisitor) {
+pVisitor.visitDeck(this);
+}
+}
+public class CardSequence {
+public void accept(CardSourceVisitor pVisitor) {
+pVisitor.visitCardSequence(this);
+}
+}
+32
+
+Invoking the behaviour
+
+// in client code
+Deck deck = new Deck();
+PrintingVisitor visitor = new PrintingVisitor();
+deck.accept(visitor);
+
+33
+
+Invoking the behaviour
+
+We can think of visitDeck as a sort of a callback method -the elements call the visitors at the appropriate time.
+34
+
+CompositeCardSource
+
+• We have to do some extra work to make the Visitor
+pattern work with CompositeCardSource.
+
+• If we apply an operation (like print, size, etc.) to a
+
+CompositeCardSource, we really want the operation to be
+applied to all of its aggregated elements.
+
+35
+
+CompositeCardSource
+
+public class CompositeCardSource implements CardSource {
+private final List<CardSource> aElements;
+
+}
+
+public void accept(CardSourceVisitor pVisitor) {
+pVisitor.visitCompositeCardSource(this);
+for (CardSource source : aElements) {
+source.accept(pVisitor);
+}
+}
+
+36
+
+CompositeCardSource
+
+37
+
+CompositeCardSource
+• We could have instead placed this same code inside the
+visitCompositeCardSource method, instead of accept:
+
+public class PrintVisitor implements CardSourceVisitor {
+public void visitCompositeCardSource(CompositeCardSource pCompCardSrc) {
+for (CardSource source : pCompositeCardSource) {
+source.accept(this);
+}
+}
+...
+}
+
+• (Since this class can't access the private aElements eld
+of the composite, we'd have to make the composite
+iterable.)
+
+fi
+
+38
+
+CompositeCardSource
+
+public class CompositeCardSource implements CardSource,
+Iterable<CardSource> {
+private final List<CardSource> aElements;
+
+}
+
+public Iterator<CardSource> iterator() {
+return aElements.iterator();
+}
+...
+
+39
+
+CompositeCardSource
+
+40
+
+CompositeCardSource
+• The advantage to placing the traversal code in the visit
+method is that, depending on the behaviour, we can
+change the order of traversal, if we wanted.
+
+• The downside is that we have to make the composite
+
+class iterable, possibly making its encapsulation weaker.
+
+• Another downside is that the traversal code would be repeated in
+every concrete visitor (DUPLICATED CODE).
+
+41
+
+Visitor with inheritance
+
+public abstract class AbstractCardSourceVisitor implements CardSourceVisitor {
+public void visitCompositeCardSource(CompositeCardSource pCompositeCardSrc) {
+for (CardSource source : pCompositeCardSource) {
+source.accept(this);
+}
+}
+public void visitDeck(Deck pDeck) {}
+public void visitCardSequence(CardSequence pCardSequence) {}
+}
+
+Avoids duplicated code problem.
+
+42
+
+Visitor with data ow
+• All of our visit methods have been void so far.
+• But we may want to return information from them. E.g., a
+size visitor should return the size.
+
+• But, all visit methods must return void, or else they wouldn't
+implement the abstract visitor interface.
+
+• Instead, we will store the computed data into the visitor object.
+
+fl
+
+43
+
+Visitor with data ow
+public class CountingVisitor extends AbstractCardSourceVisitor {
+private int aCount = 0;
+public void visitDeck(Deck pDeck) {
+for (Card card : pDeck) {
+aCount++;
+}
+}
+public void visitCardSequence(CardSequence pCardSequence) {
+aCount += pCardSequence.size();
+}
+
+44
+fl
+
+}
+
+public int getCount() {
+return aCount;
+}
+
+Visitor with data ow
+
+// in client code
+CountingVisitor visitor = new CountingVisitor();
+root.accept(visitor);
+int result = visitor.getCount();
+
+fl
+
+45
+
+References
+
+• Robillard ch. 8.7-8.8, p.224-242
+• Exercises #11-13: https://github.com/prmr/DesignBook/blob/
+master/exercises/e-chapter8.md
+
+46
+
+Coming up
+
+• Next lecture:
+• New topic!
+
+47
+
+
